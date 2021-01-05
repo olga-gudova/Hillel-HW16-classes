@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototypes and constructors</title>
+</head>
+<body>
+    <script>
+
+        class Student {
+            
+            #attendance = new Array(30);
+            #marks = new Array(30);
+
+            constructor(name, surname, yearOfBirth) {
+                this.name = name;
+                this.surname = surname;
+                this.yearOfBirth = yearOfBirth;                
+            }
+
+            getAge() {
+                return (new Date).getFullYear() - this.yearOfBirth;
+            }
+
+            averageMark() {
+                const notEmpties = this.#marks.filter( (m) => (m !== undefined) ? true : false );
+                const marksSum = notEmpties.reduce((acc, val) => acc + val, 0);
+
+                const average = Math.round(marksSum / notEmpties.length);
+
+                return average; 
+            }
+
+            #findIndexOfEmpty() {
+                return this.#attendance.findIndex( (el) => el === undefined );
+            }
+
+            present() {
+                const indexToRewrite = this.#findIndexOfEmpty();
+
+                if (indexToRewrite >= 0 && indexToRewrite < 30) {
+                    this.#attendance[indexToRewrite] = true;
+                } else if (indexToRewrite >= 30) {
+                    return 'Hey, there are only 30 lessons!';
+                } return;
+            }
+
+            absent() {            
+                const indexToRewrite = this.#findIndexOfEmpty();
+
+                if (indexToRewrite >= 0 && indexToRewrite < 30) {
+                    this.#attendance[indexToRewrite] = false;
+                } else if (indexToRewrite >= 30) {
+                    return 'Hey, there are only 30 lessons!';
+                } return;
+            }
+
+            mark(mark) {
+                const indexToRewrite = this.#marks.findIndex( (el) => el === undefined );
+
+                if (indexToRewrite >= 0 && indexToRewrite < 30 && mark >= 0 && mark <= 10) {
+                    this.#marks[indexToRewrite] = mark;
+                } else if (indexToRewrite >= 30) {
+                    return 'Hey, there are only 30 lessons!';
+                } return;            
+            }
+
+            summary() {
+                const averMark = this.averageMark();
+                
+                const notEmpties = this.#attendance.filter( (m) => (m !== undefined) ? true : false ).length;
+                const presence = this.#attendance.filter( (m) => (m) ? true : false ).length;
+                const averAttendance = (presence / notEmpties).toFixed(1);
+
+                if (averMark >= 9 && averAttendance >= 0.9) {
+                    return 'Ути какой молодчинка!';
+                } else if ((averMark < 9 && averAttendance >= 0.9) || (averMark >= 9 && averAttendance < 0.9)) {
+                    return 'Норм, но можно лучше';
+                } return 'Редиска!';
+            }
+        }
+
+        const student1 = new Student('Oleg', 'Ivanov', 2001);
+        student1.present();
+        student1.present();
+        student1.absent();
+        student1.present();        
+        student1.present();
+        student1.absent();
+        student1.present();
+        student1.mark(10);
+        student1.mark(10);
+        student1.mark(9);
+        student1.mark(10);
+        student1.mark(9);
+        student1.mark(10);
+
+    </script>
+</body>
+</html>
